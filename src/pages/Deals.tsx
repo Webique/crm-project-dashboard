@@ -68,17 +68,12 @@ const Deals = () => {
         </div>
 
         <Tabs defaultValue="current" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="current">Current Deals</TabsTrigger>
-            <TabsTrigger value="departments">By Department</TabsTrigger>
             <TabsTrigger value="finished">Finished Deals</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="current" className="space-y-6">
-            {renderDealSection(currentDeals, "Active Deals")}
-          </TabsContent>
-          
-          <TabsContent value="departments" className="space-y-8">
+          <TabsContent value="current" className="space-y-8">
             {renderDealSection(financialDeals, "Financial Department")}
             {renderDealSection(technicalDeals, "Technical Department")}
           </TabsContent>
