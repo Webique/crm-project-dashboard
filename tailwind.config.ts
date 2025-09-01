@@ -61,6 +61,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				crm: {
+					primary: 'hsl(var(--crm-primary))',
+					secondary: 'hsl(var(--crm-secondary))',
+					background: 'hsl(var(--crm-background))'
+				},
+				status: {
+					financial: 'hsl(var(--status-financial))',
+					technical: 'hsl(var(--status-technical))',
+					finished: 'hsl(var(--status-finished))'
 				}
 			},
 			borderRadius: {
