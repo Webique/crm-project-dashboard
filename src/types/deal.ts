@@ -1,4 +1,4 @@
-export type DealStage = 'Financial' | 'Technical Department' | 'Finished';
+export type DealStage = 'Financial Department' | 'Technical Department' | 'Finished';
 
 export interface Deal {
   id: string;

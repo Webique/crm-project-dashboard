@@ -22,7 +22,7 @@ const CreateDeal = () => {
     iban: '',
     paymentNotes: '',
     dealAmount: 0,
-    stage: 'Financial',
+    stage: 'Financial Department',
     dealDescription: '',
   });
   

@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DealCard from '@/components/DealCard';
 import Navigation from '@/components/Navigation';
 import { dealStore } from '@/store/dealStore';
+import { Deal } from '@/types/deal';
 
 const Deals = () => {
   const navigate = useNavigate();
@@ -17,6 +19,35 @@ const Deals = () => {
   const handleCreateDeal = () => {
     navigate('/create-deal');
   };
+
+  const financialDeals = deals.filter(deal => deal.stage === 'Financial Department');
+  const technicalDeals = deals.filter(deal => deal.stage === 'Technical Department');
+  const finishedDeals = deals.filter(deal => deal.stage === 'Finished');
+  const currentDeals = deals.filter(deal => deal.stage !== 'Finished');
+
+  const renderDealSection = (sectionDeals: Deal[], title: string) => (
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+        {title} 
+        <span className="text-sm font-normal text-muted-foreground">({sectionDeals.length})</span>
+      </h3>
+      {sectionDeals.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sectionDeals.map((deal) => (
+            <DealCard
+              key={deal.id}
+              deal={deal}
+              onClick={() => handleDealClick(deal.id)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-8 text-muted-foreground">
+          No deals in this category
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -36,15 +67,26 @@ const Deals = () => {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {deals.map((deal) => (
-            <DealCard
-              key={deal.id}
-              deal={deal}
-              onClick={() => handleDealClick(deal.id)}
-            />
-          ))}
-        </div>
+        <Tabs defaultValue="current" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="current">Current Deals</TabsTrigger>
+            <TabsTrigger value="departments">By Department</TabsTrigger>
+            <TabsTrigger value="finished">Finished Deals</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="current" className="space-y-6">
+            {renderDealSection(currentDeals, "Active Deals")}
+          </TabsContent>
+          
+          <TabsContent value="departments" className="space-y-8">
+            {renderDealSection(financialDeals, "Financial Department")}
+            {renderDealSection(technicalDeals, "Technical Department")}
+          </TabsContent>
+          
+          <TabsContent value="finished" className="space-y-6">
+            {renderDealSection(finishedDeals, "Completed Deals")}
+          </TabsContent>
+        </Tabs>
 
         {deals.length === 0 && (
           <div className="text-center py-12">
