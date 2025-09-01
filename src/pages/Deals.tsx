@@ -32,7 +32,7 @@ const Deals = () => {
         <span className="text-sm font-normal text-muted-foreground">({sectionDeals.length})</span>
       </h3>
       {sectionDeals.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {sectionDeals.map((deal) => (
             <DealCard
               key={deal.id}
