@@ -73,9 +73,15 @@ const Deals = () => {
             <TabsTrigger value="finished">Finished Deals</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="current" className="space-y-8">
-            {renderDealSection(financialDeals, "Financial Department")}
-            {renderDealSection(technicalDeals, "Technical Department")}
+          <TabsContent value="current" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                {renderDealSection(financialDeals, "Financial Department")}
+              </div>
+              <div className="space-y-4">
+                {renderDealSection(technicalDeals, "Technical Department")}
+              </div>
+            </div>
           </TabsContent>
           
           <TabsContent value="finished" className="space-y-6">
