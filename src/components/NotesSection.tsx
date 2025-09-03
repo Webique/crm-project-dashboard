@@ -22,16 +22,16 @@ interface NotesSectionProps {
 const NotesSection = ({ dealId }: NotesSectionProps) => {
   const [notes, setNotes] = useState<Note[]>([
     {
-      id: '1',
-      author: 'John Smith',
-      content: 'Initial contact made with the client. They seem very interested in our services and want to schedule a follow-up meeting next week.',
-      createdAt: new Date('2024-01-15'),
-    },
-    {
       id: '2', 
       author: 'Sarah Johnson',
       content: 'Follow-up meeting completed. Client has approved the proposal and is ready to move forward. Need to prepare contracts.',
       createdAt: new Date('2024-01-22'),
+    },
+    {
+      id: '1',
+      author: 'John Smith',
+      content: 'Initial contact made with the client. They seem very interested in our services and want to schedule a follow-up meeting next week.',
+      createdAt: new Date('2024-01-15'),
     }
   ]);
   
