@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Calendar, DollarSign, Mail, Phone, CreditCard } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import StatusSelect from '@/components/StatusSelect';
+import NotesSection from '@/components/NotesSection';
 import { dealStore } from '@/store/dealStore';
 import { Deal, DealStage } from '@/types/deal';
 import { toast } from '@/hooks/use-toast';
@@ -98,7 +99,7 @@ const DealDetails = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <Button 
             variant="ghost" 
@@ -120,61 +121,10 @@ const DealDetails = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Deal Info */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card className="bg-card border-border">
-              <CardHeader>
-                <CardTitle className="text-card-foreground flex items-center">
-                  <DollarSign className="w-5 h-5 mr-2" />
-                  Deal Overview
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h3 className="text-2xl font-bold text-card-foreground">
-                    {formatCurrency(deal.dealAmount)}
-                  </h3>
-                  <p className="text-muted-foreground">Total Deal Value</p>
-                </div>
-                
-                <div>
-                  <h4 className="font-semibold text-card-foreground mb-2">Description</h4>
-                  <p className="text-muted-foreground">{deal.dealDescription}</p>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-card-foreground mb-2">Payment Notes</h4>
-                  <p className="text-muted-foreground">{deal.paymentNotes || 'No payment notes'}</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card border-border">
-              <CardHeader>
-                <CardTitle className="text-card-foreground">Stage Management</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium text-card-foreground mb-2 block">
-                      Current Stage
-                    </label>
-                    <StatusSelect
-                      value={deal.stage}
-                      onValueChange={handleStageChange}
-                    />
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Update the deal stage to track progress through your sales pipeline.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Contact & Details Sidebar */}
-          <div className="space-y-6">
+        <div className="flex gap-6">
+          {/* Left Sidebar - Deal Details */}
+          <div className="w-80 flex-shrink-0 space-y-6">
+            {/* Contact Information */}
             <Card className="bg-card border-border">
               <CardHeader>
                 <CardTitle className="text-card-foreground flex items-center">
@@ -209,6 +159,58 @@ const DealDetails = () => {
               </CardContent>
             </Card>
 
+            {/* Stage Management */}
+            <Card className="bg-card border-border">
+              <CardHeader>
+                <CardTitle className="text-card-foreground">Stage Management</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium text-card-foreground mb-2 block">
+                      Current Stage
+                    </label>
+                    <StatusSelect
+                      value={deal.stage}
+                      onValueChange={handleStageChange}
+                    />
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Update the deal stage to track progress through your sales pipeline.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Deal Overview */}
+            <Card className="bg-card border-border">
+              <CardHeader>
+                <CardTitle className="text-card-foreground flex items-center">
+                  <DollarSign className="w-5 h-5 mr-2" />
+                  Deal Overview
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <h3 className="text-2xl font-bold text-card-foreground">
+                    {formatCurrency(deal.dealAmount)}
+                  </h3>
+                  <p className="text-muted-foreground">Total Deal Value</p>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-card-foreground mb-2">Description</h4>
+                  <p className="text-muted-foreground">{deal.dealDescription}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-card-foreground mb-2">Payment Notes</h4>
+                  <p className="text-muted-foreground">{deal.paymentNotes || 'No payment notes'}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Deal Timeline */}
             <Card className="bg-card border-border">
               <CardHeader>
                 <CardTitle className="text-card-foreground flex items-center">
@@ -223,6 +225,11 @@ const DealDetails = () => {
                 </div>
               </CardContent>
             </Card>
+          </div>
+
+          {/* Right Side - Notes Section (Takes most of the page) */}
+          <div className="flex-1">
+            <NotesSection dealId={deal.id} />
           </div>
         </div>
       </div>

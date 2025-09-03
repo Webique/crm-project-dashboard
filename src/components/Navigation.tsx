@@ -41,6 +41,17 @@ const Navigation = () => {
               >
                 Create Deal
               </Link>
+              <Link
+                to="/admin"
+                className={cn(
+                  "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200",
+                  isActive('/admin')
+                    ? "border-foreground text-foreground"
+                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground"
+                )}
+              >
+                Admin
+              </Link>
             </div>
           </div>
         </div>
