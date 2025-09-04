@@ -50,6 +50,18 @@ const initialDeals: Deal[] = [
     dealDescription: 'MVP development and technical consulting',
     createdDate: new Date('2024-02-20'),
   },
+  {
+    id: '5',
+    clientName: 'أحمد محمد الأحمد',
+    contactEmail: 'ahmed.mohammed@company.com',
+    contactPhone: '+966-555-0123',
+    iban: 'GB29 NWBK 6016 1331 9268 19',
+    paymentNotes: 'Net 15 payment terms',
+    dealAmount: 85000,
+    stage: 'Technical Department',
+    dealDescription: 'Mobile application development and API integration',
+    createdDate: new Date('2024-03-01'),
+  },
 ];
 
 class DealStore {
@@ -81,6 +93,27 @@ class DealStore {
       return true;
     }
     return false;
+  }
+
+  getClientDeals(clientName: string): Deal[] {
+    return this.deals.filter(deal => deal.clientName === clientName);
+  }
+
+  getAllClients(): { name: string; totalDeals: number; totalAmount: number }[] {
+    const clientMap = new Map<string, { totalDeals: number; totalAmount: number }>();
+    
+    this.deals.forEach(deal => {
+      const existing = clientMap.get(deal.clientName) || { totalDeals: 0, totalAmount: 0 };
+      clientMap.set(deal.clientName, {
+        totalDeals: existing.totalDeals + 1,
+        totalAmount: existing.totalAmount + deal.dealAmount
+      });
+    });
+
+    return Array.from(clientMap.entries()).map(([name, data]) => ({
+      name,
+      ...data
+    }));
   }
 }
 
