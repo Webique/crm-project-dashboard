@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, ShoppingCart, DollarSign, Calendar } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import DealCard from '@/components/DealCard';
 import Navigation from '@/components/Navigation';
 import { dealStore } from '@/store/dealStore';
@@ -24,6 +25,59 @@ const Deals = () => {
   const technicalDeals = deals.filter(deal => deal.stage === 'Technical Department');
   const finishedDeals = deals.filter(deal => deal.stage === 'Finished');
   const currentDeals = deals.filter(deal => deal.stage !== 'Finished');
+
+  // Mock paid services data - will be replaced with real data from backend later
+  const recentPaidServices = [
+    {
+      id: '1',
+      clientName: 'أحمد محمد الأحمد',
+      serviceName: 'Hungerstation Marketing Campaign',
+      amount: 2500,
+      paymentDate: new Date('2024-01-20'),
+      status: 'Active'
+    },
+    {
+      id: '2', 
+      clientName: 'سارة عبدالله',
+      serviceName: 'Keeta Premium Promotion',
+      amount: 1800,
+      paymentDate: new Date('2024-02-15'),
+      status: 'Completed'
+    },
+    {
+      id: '3',
+      clientName: 'محمد علي',
+      serviceName: 'The Chefz Social Media Package',
+      amount: 1200,
+      paymentDate: new Date('2024-03-01'),
+      status: 'Active'
+    },
+    {
+      id: '4',
+      clientName: 'فاطمة احمد',
+      serviceName: 'Careem Food Advertisement',
+      amount: 3200,
+      paymentDate: new Date('2024-03-10'),
+      status: 'Active'
+    }
+  ];
+
+  const totalServicesRevenue = recentPaidServices.reduce((sum, service) => sum + service.amount, 0);
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
 
   const renderDealSection = (sectionDeals: Deal[], title: string) => (
     <div className="space-y-4">
@@ -66,6 +120,53 @@ const Deals = () => {
             Create Deal
           </Button>
         </div>
+
+        {/* Paid Services Section */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ShoppingCart className="h-5 w-5" />
+              Recent Paid Services
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+                <div className="flex items-center gap-2">
+                  <DollarSign className="h-5 w-5 text-green-600" />
+                  <span className="font-semibold">Total Services Revenue:</span>
+                </div>
+                <span className="text-xl font-bold text-green-600">{formatCurrency(totalServicesRevenue)}</span>
+              </div>
+              
+              <div className="grid gap-4">
+                {recentPaidServices.map((service) => (
+                  <div key={service.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <h3 className="font-semibold text-foreground">{service.serviceName}</h3>
+                        <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                          <Calendar className="h-3 w-3" />
+                          {service.clientName} • Paid on {formatDate(service.paymentDate)}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-lg font-bold">{formatCurrency(service.amount)}</p>
+                        <span className={`text-xs px-2 py-1 rounded-full ${
+                          service.status === 'Active' 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-gray-100 text-gray-800'
+                        }`}>
+                          {service.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         <Tabs defaultValue="current" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
