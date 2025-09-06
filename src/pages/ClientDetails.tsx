@@ -6,23 +6,47 @@ import Navigation from '../components/Navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import { ArrowLeft, Mail, Phone, CreditCard, Calendar } from 'lucide-react';
+import { ArrowLeft, Mail, Phone, CreditCard, Calendar, Key, Copy } from 'lucide-react';
 
 const ClientDetails = () => {
   const { clientName } = useParams<{ clientName: string }>();
   const navigate = useNavigate();
   const [clientDeals, setClientDeals] = useState<Deal[]>([]);
+  const [generatedPassword, setGeneratedPassword] = useState<string>('');
+
+  const generateRandomPassword = () => {
+    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+    let password = '';
+    for (let i = 0; i < 12; i++) {
+      password += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    return password;
+  };
 
   useEffect(() => {
     if (clientName) {
       const decodedClientName = decodeURIComponent(clientName);
       const deals = dealStore.getClientDeals(decodedClientName);
       setClientDeals(deals);
+      // Generate a consistent password for this client (you could use client name as seed)
+      setGeneratedPassword(generateRandomPassword());
     }
   }, [clientName]);
 
   const handleBackClick = () => {
     navigate('/admin');
+  };
+
+  const handleCopyPassword = async () => {
+    try {
+      await navigator.clipboard.writeText(generatedPassword);
+    } catch (err) {
+      console.error('Failed to copy password:', err);
+    }
+  };
+
+  const handleRegeneratePassword = () => {
+    setGeneratedPassword(generateRandomPassword());
   };
 
   const getStageColor = (stage: Deal['stage']) => {
@@ -89,7 +113,7 @@ const ClientDetails = () => {
           <p className="text-muted-foreground mt-2">Client Details & Deal History</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
           {/* Client Overview */}
           <Card>
             <CardHeader>
@@ -110,6 +134,41 @@ const ClientDetails = () => {
               <div className="flex items-center gap-2">
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-mono">{clientInfo.iban}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Client Credentials */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Key className="h-5 w-5" />
+                Generated Password
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-mono bg-muted px-2 py-1 rounded">
+                  {generatedPassword}
+                </span>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleCopyPassword}
+                  size="sm"
+                  variant="outline"
+                  className="flex items-center gap-1"
+                >
+                  <Copy className="h-3 w-3" />
+                  Copy
+                </Button>
+                <Button
+                  onClick={handleRegeneratePassword}
+                  size="sm"
+                  variant="outline"
+                >
+                  Regenerate
+                </Button>
               </div>
             </CardContent>
           </Card>
