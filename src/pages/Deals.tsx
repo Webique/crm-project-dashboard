@@ -121,15 +121,29 @@ const Deals = () => {
           </Button>
         </div>
 
-        {/* Paid Services Section */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <ShoppingCart className="h-5 w-5" />
-              Recent Paid Services
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+        <Tabs defaultValue="current" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="current">Current Deals</TabsTrigger>
+            <TabsTrigger value="finished">Finished Deals</TabsTrigger>
+            <TabsTrigger value="services">Paid Services</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="current" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                {renderDealSection(financialDeals, "Sales Department")}
+              </div>
+              <div className="space-y-4">
+                {renderDealSection(technicalDeals, "Technical Department")}
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="finished" className="space-y-6">
+            {renderDealSection(finishedDeals, "Completed Deals")}
+          </TabsContent>
+
+          <TabsContent value="services" className="space-y-6">
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
                 <div className="flex items-center gap-2">
@@ -165,28 +179,6 @@ const Deals = () => {
                 ))}
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        <Tabs defaultValue="current" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="current">Current Deals</TabsTrigger>
-            <TabsTrigger value="finished">Finished Deals</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="current" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="space-y-4">
-                {renderDealSection(financialDeals, "Sales Department")}
-              </div>
-              <div className="space-y-4">
-                {renderDealSection(technicalDeals, "Technical Department")}
-              </div>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="finished" className="space-y-6">
-            {renderDealSection(finishedDeals, "Completed Deals")}
           </TabsContent>
         </Tabs>
 
