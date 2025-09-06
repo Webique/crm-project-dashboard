@@ -6,10 +6,12 @@ export interface Deal {
   contactEmail: string;
   contactPhone: string;
   iban: string;
+  crNumber: string;
   paymentNotes: string;
   dealAmount: number;
   stage: DealStage;
   dealDescription: string;
+  marketingServices: string[];
   createdDate: Date;
 }
 
@@ -18,8 +20,10 @@ export interface CreateDealInput {
   contactEmail: string;
   contactPhone: string;
   iban: string;
+  crNumber: string;
   paymentNotes: string;
   dealAmount: number;
   stage: DealStage;
   dealDescription: string;
+  marketingServices: string[];
 }

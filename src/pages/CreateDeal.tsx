@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import Navigation from '@/components/Navigation';
@@ -20,10 +21,12 @@ const CreateDeal = () => {
     contactEmail: '',
     contactPhone: '',
     iban: '',
+    crNumber: '',
     paymentNotes: '',
     dealAmount: 0,
     stage: 'Financial Department',
     dealDescription: '',
+    marketingServices: [],
   });
   
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -48,6 +51,14 @@ const CreateDeal = () => {
     
     if (formData.dealAmount <= 0) {
       newErrors.dealAmount = 'Deal amount must be greater than 0';
+    }
+    
+    if (!formData.crNumber.trim()) {
+      newErrors.crNumber = 'CR number is required';
+    }
+    
+    if (formData.marketingServices.length === 0) {
+      newErrors.marketingServices = 'Please select at least one marketing service';
     }
     
     setErrors(newErrors);
@@ -83,12 +94,22 @@ const CreateDeal = () => {
     navigate('/');
   };
 
-  const handleInputChange = (field: keyof CreateDealInput, value: string | number | DealStage) => {
+  const handleInputChange = (field: keyof CreateDealInput, value: string | number | DealStage | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
   };
+
+  const handleMarketingServiceChange = (service: string, checked: boolean) => {
+    const updatedServices = checked 
+      ? [...formData.marketingServices, service]
+      : formData.marketingServices.filter(s => s !== service);
+    
+    handleInputChange('marketingServices', updatedServices);
+  };
+
+  const marketingOptions = ['hungerstation', 'the chefz', 'keeta', 'marsool'];
 
   return (
     <div className="min-h-screen bg-background">
@@ -177,6 +198,21 @@ const CreateDeal = () => {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="crNumber" className="text-card-foreground">
+                    CR Number *
+                  </Label>
+                  <Input
+                    id="crNumber"
+                    value={formData.crNumber}
+                    onChange={(e) => handleInputChange('crNumber', e.target.value)}
+                    className="bg-input border-border text-foreground"
+                  />
+                  {errors.crNumber && (
+                    <p className="text-sm text-destructive">{errors.crNumber}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="dealAmount" className="text-card-foreground">
                     Deal Amount *
                   </Label>
@@ -228,6 +264,34 @@ const CreateDeal = () => {
                   className="bg-input border-border text-foreground"
                   rows={4}
                 />
+              </div>
+
+              <div className="space-y-4">
+                <Label className="text-card-foreground">
+                  Where do you want us to market your services? *
+                </Label>
+                <div className="grid grid-cols-2 gap-4">
+                  {marketingOptions.map((option) => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={option}
+                        checked={formData.marketingServices.includes(option)}
+                        onCheckedChange={(checked) => 
+                          handleMarketingServiceChange(option, checked as boolean)
+                        }
+                      />
+                      <Label 
+                        htmlFor={option} 
+                        className="text-sm font-normal text-card-foreground capitalize cursor-pointer"
+                      >
+                        {option}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+                {errors.marketingServices && (
+                  <p className="text-sm text-destructive">{errors.marketingServices}</p>
+                )}
               </div>
 
               <div className="flex justify-end space-x-4 pt-6">
