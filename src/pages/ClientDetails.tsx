@@ -143,33 +143,36 @@ const ClientDetails = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Key className="h-5 w-5" />
-                Generated Password
+                Login Credentials
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-mono bg-muted px-2 py-1 rounded">
-                  {generatedPassword}
-                </span>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground">Email:</span>
+                  <span className="text-sm font-mono bg-muted px-2 py-1 rounded flex-1">
+                    {clientInfo.contactEmail}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground">Password:</span>
+                  <span className="text-sm font-mono bg-muted px-2 py-1 rounded flex-1">
+                    {generatedPassword}
+                  </span>
+                </div>
               </div>
-              <div className="flex gap-2">
-                <Button
-                  onClick={handleCopyPassword}
-                  size="sm"
-                  variant="outline"
-                  className="flex items-center gap-1"
-                >
-                  <Copy className="h-3 w-3" />
-                  Copy
-                </Button>
-                <Button
-                  onClick={handleRegeneratePassword}
-                  size="sm"
-                  variant="outline"
-                >
-                  Regenerate
-                </Button>
-              </div>
+              <Button
+                onClick={() => {
+                  const credentials = `Email: ${clientInfo.contactEmail}\nPassword: ${generatedPassword}`;
+                  navigator.clipboard.writeText(credentials);
+                }}
+                size="sm"
+                variant="outline"
+                className="flex items-center gap-1 w-full"
+              >
+                <Copy className="h-3 w-3" />
+                Copy Credentials
+              </Button>
             </CardContent>
           </Card>
 
