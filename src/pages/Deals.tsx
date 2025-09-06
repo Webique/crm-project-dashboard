@@ -64,6 +64,11 @@ const Deals = () => {
 
   const totalServicesRevenue = recentPaidServices.reduce((sum, service) => sum + service.amount, 0);
 
+  // Sort services by newest first
+  const sortedPaidServices = [...recentPaidServices].sort((a, b) => 
+    new Date(b.paymentDate).getTime() - new Date(a.paymentDate).getTime()
+  );
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -154,7 +159,7 @@ const Deals = () => {
               </div>
               
               <div className="grid gap-4">
-                {recentPaidServices.map((service) => (
+                {sortedPaidServices.map((service) => (
                   <div key={service.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
                     <div className="flex items-start justify-between mb-2">
                       <div>
