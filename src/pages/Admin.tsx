@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { dealStore } from '../store/dealStore';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Users, DollarSign, TrendingUp } from 'lucide-react';
+import { Users, DollarSign, TrendingUp, ShoppingCart } from 'lucide-react';
 
 const Admin = () => {
   const [clients, setClients] = useState<{ name: string; totalDeals: number; totalAmount: number }[]>([]);
@@ -24,6 +24,25 @@ const Admin = () => {
   const totalClients = clients.length;
   const totalDeals = clients.reduce((sum, client) => sum + client.totalDeals, 0);
 
+  // Mock paid services data - will be replaced with real data from backend later
+  const allPaidServices = [
+    { id: '1', clientName: 'أحمد محمد الأحمد', serviceName: 'Hungerstation Marketing Campaign', amount: 2500, paymentDate: new Date('2024-01-20') },
+    { id: '2', clientName: 'سارة عبدالله', serviceName: 'Keeta Premium Promotion', amount: 1800, paymentDate: new Date('2024-02-15') },
+    { id: '3', clientName: 'محمد علي', serviceName: 'The Chefz Social Media Package', amount: 1200, paymentDate: new Date('2024-03-01') },
+    { id: '4', clientName: 'فاطمة احمد', serviceName: 'Careem Food Advertisement', amount: 3200, paymentDate: new Date('2024-03-10') },
+    { id: '5', clientName: 'أحمد محمد الأحمد', serviceName: 'Instagram Influencer Campaign', amount: 1500, paymentDate: new Date('2024-03-15') },
+  ];
+
+  const totalServicesRevenue = allPaidServices.reduce((sum, service) => sum + service.amount, 0);
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -31,7 +50,7 @@ const Admin = () => {
         <h1 className="text-3xl font-bold text-foreground mb-8">Admin Panel</h1>
         
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Clients</CardTitle>
@@ -61,7 +80,44 @@ const Admin = () => {
               <div className="text-2xl font-bold">{formatCurrency(totalRevenue)}</div>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Services Revenue</CardTitle>
+              <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{formatCurrency(totalServicesRevenue)}</div>
+            </CardContent>
+          </Card>
         </div>
+
+        {/* Recent Paid Services */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ShoppingCart className="h-5 w-5" />
+              Recent Paid Services
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {allPaidServices.slice(0, 5).map((service) => (
+                <div key={service.id} className="flex items-center justify-between p-4 border rounded-lg hover:shadow-md transition-shadow">
+                  <div>
+                    <h3 className="font-semibold text-foreground">{service.serviceName}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {service.clientName} • {formatDate(service.paymentDate)}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold text-primary">{formatCurrency(service.amount)}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Clients List */}
         <Card>
