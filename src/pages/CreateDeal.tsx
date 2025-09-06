@@ -24,7 +24,7 @@ const CreateDeal = () => {
     crNumber: '',
     paymentNotes: '',
     dealAmount: 0,
-    stage: 'Financial Department',
+    stage: 'Sales Department',
     dealDescription: '',
     marketingServices: [],
   });

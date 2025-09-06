@@ -20,7 +20,7 @@ const Deals = () => {
     navigate('/create-deal');
   };
 
-  const financialDeals = deals.filter(deal => deal.stage === 'Financial Department');
+  const financialDeals = deals.filter(deal => deal.stage === 'Sales Department');
   const technicalDeals = deals.filter(deal => deal.stage === 'Technical Department');
   const finishedDeals = deals.filter(deal => deal.stage === 'Finished');
   const currentDeals = deals.filter(deal => deal.stage !== 'Finished');
@@ -76,7 +76,7 @@ const Deals = () => {
           <TabsContent value="current" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-4">
-                {renderDealSection(financialDeals, "Financial Department")}
+                {renderDealSection(financialDeals, "Sales Department")}
               </div>
               <div className="space-y-4">
                 {renderDealSection(technicalDeals, "Technical Department")}

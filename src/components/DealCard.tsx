@@ -11,7 +11,7 @@ interface DealCardProps {
 const DealCard = ({ deal, onClick }: DealCardProps) => {
   const getStageColor = (stage: Deal['stage']) => {
     switch (stage) {
-      case 'Financial Department':
+      case 'Sales Department':
         return 'bg-status-financial text-black';
       case 'Technical Department':
         return 'bg-status-technical text-white';

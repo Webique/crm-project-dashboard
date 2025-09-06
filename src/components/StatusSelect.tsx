@@ -14,7 +14,7 @@ interface StatusSelectProps {
 }
 
 const StatusSelect = ({ value, onValueChange, disabled }: StatusSelectProps) => {
-  const stages: DealStage[] = ['Financial Department', 'Technical Department', 'Finished'];
+  const stages: DealStage[] = ['Sales Department', 'Technical Department', 'Finished'];
 
   return (
     <Select value={value} onValueChange={onValueChange} disabled={disabled}>

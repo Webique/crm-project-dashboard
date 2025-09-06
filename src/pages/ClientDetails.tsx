@@ -27,7 +27,7 @@ const ClientDetails = () => {
 
   const getStageColor = (stage: Deal['stage']) => {
     switch (stage) {
-      case 'Financial Department':
+      case 'Sales Department':
         return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'Technical Department':
         return 'bg-blue-100 text-blue-800 border-blue-200';
