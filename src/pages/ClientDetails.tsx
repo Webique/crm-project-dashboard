@@ -6,7 +6,7 @@ import Navigation from '../components/Navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import { ArrowLeft, Mail, Phone, CreditCard, Calendar, Key, Copy } from 'lucide-react';
+import { ArrowLeft, Mail, Phone, CreditCard, Calendar, Key, Copy, ShoppingCart, DollarSign } from 'lucide-react';
 
 const ClientDetails = () => {
   const { clientName } = useParams<{ clientName: string }>();
@@ -80,6 +80,33 @@ const ClientDetails = () => {
   const totalAmount = clientDeals.reduce((sum, deal) => sum + deal.dealAmount, 0);
   const finishedDeals = clientDeals.filter(deal => deal.stage === 'Finished');
   const totalPaid = finishedDeals.reduce((sum, deal) => sum + deal.dealAmount, 0);
+
+  // Mock paid services data - will be replaced with real data from backend later
+  const paidServices = [
+    {
+      id: '1',
+      serviceName: 'Hungerstation Marketing Campaign',
+      amount: 2500,
+      paymentDate: new Date('2024-01-20'),
+      status: 'Active'
+    },
+    {
+      id: '2', 
+      serviceName: 'Keeta Premium Promotion',
+      amount: 1800,
+      paymentDate: new Date('2024-02-15'),
+      status: 'Completed'
+    },
+    {
+      id: '3',
+      serviceName: 'The Chefz Social Media Package',
+      amount: 1200,
+      paymentDate: new Date('2024-03-01'),
+      status: 'Active'
+    }
+  ];
+
+  const totalServicesPaid = paidServices.reduce((sum, service) => sum + service.amount, 0);
 
   if (!clientName || clientDeals.length === 0) {
     return (
@@ -214,6 +241,59 @@ const ClientDetails = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Paid Services Section */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ShoppingCart className="h-5 w-5" />
+              Paid Services History
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {paidServices.length > 0 ? (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <DollarSign className="h-5 w-5 text-green-600" />
+                    <span className="font-semibold">Total Services Paid:</span>
+                  </div>
+                  <span className="text-xl font-bold text-green-600">{formatCurrency(totalServicesPaid)}</span>
+                </div>
+                
+                <div className="grid gap-4">
+                  {paidServices.map((service) => (
+                    <div key={service.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <h3 className="font-semibold text-foreground">{service.serviceName}</h3>
+                          <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                            <Calendar className="h-3 w-3" />
+                            Paid on {formatDate(service.paymentDate)}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-lg font-bold">{formatCurrency(service.amount)}</p>
+                          <Badge 
+                            variant={service.status === 'Active' ? 'default' : 'secondary'}
+                            className="text-xs"
+                          >
+                            {service.status}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <ShoppingCart className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>No services purchased yet</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Deals List */}
         <Card>
